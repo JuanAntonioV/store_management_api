@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.5",
+    "@neondatabase/serverless": "^0.10.2",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
     "drizzle-orm": "^0.36.0",

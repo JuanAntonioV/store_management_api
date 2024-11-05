@@ -1,4 +1,7 @@
 import { defineConfig } from 'drizzle-kit';
+import dotEnv from 'dotenv';
+
+dotEnv.config();
 
 export default defineConfig({
   dialect: 'postgresql', // 'mysql' | 'sqlite' | 'turso'
