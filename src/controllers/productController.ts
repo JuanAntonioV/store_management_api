@@ -8,7 +8,7 @@ import { NotFoundException } from '@/utils/exceptions';
 import { okResponse, validationErrorResponse } from '@/utils/responses';
 import { desc, eq, ilike, sql } from 'drizzle-orm';
 import { Context } from 'hono';
-import { isEmpty } from 'lodash';
+import _ from 'lodash';
 
 export async function getAllProduct(c: Context) {
   const searchParams = c.req.query('search') || '';
@@ -42,7 +42,7 @@ export async function getProductDetail(c: Context) {
       .where(eq(products.id, Number(id)))
       .execute();
 
-    if (isEmpty(data)) {
+    if (_.isEmpty(data)) {
       throw NotFoundException('Produk tidak ditemukan');
     }
 
@@ -99,7 +99,7 @@ export async function updateProduct(c: Context) {
       .where(eq(products.id, Number(id)))
       .execute();
 
-    if (isEmpty(product)) {
+    if (_.isEmpty(product)) {
       throw NotFoundException('Produk tidak ditemukan');
     }
 
@@ -129,7 +129,7 @@ export async function deleteProduct(c: Context) {
       .from(products)
       .where(eq(products.id, Number(id)));
 
-    if (isEmpty(product)) {
+    if (_.isEmpty(product)) {
       throw NotFoundException('Produk tidak ditemukan');
     }
 

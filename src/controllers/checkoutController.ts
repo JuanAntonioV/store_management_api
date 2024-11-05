@@ -9,7 +9,7 @@ import {
 } from '@/utils/responses';
 import { eq } from 'drizzle-orm';
 import { Context } from 'hono';
-import { isEmpty } from 'lodash';
+import _ from 'lodash';
 
 export async function doCheckout(c: Context) {
   const data = await c.req.json();
@@ -29,7 +29,7 @@ export async function doCheckout(c: Context) {
       .where(eq(products.id, Number(validated.data.productId)))
       .execute();
 
-    if (isEmpty(product)) {
+    if (_.isEmpty(product)) {
       throw NotFoundException('Produk tidak ditemukan');
     }
 

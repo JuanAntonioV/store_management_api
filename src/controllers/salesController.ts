@@ -5,7 +5,7 @@ import { NotFoundException } from '@/utils/exceptions';
 import { okResponse } from '@/utils/responses';
 import { desc, eq, ilike } from 'drizzle-orm';
 import { Context } from 'hono';
-import { isEmpty } from 'lodash';
+import _ from 'lodash';
 
 export async function getAllSales(c: Context) {
   const searchParams = c.req.query('search') || '';
@@ -40,7 +40,7 @@ export async function getSalesDetail(c: Context) {
       .where(eq(sales.id, id))
       .execute();
 
-    if (isEmpty(data)) {
+    if (_.isEmpty(data)) {
       throw NotFoundException('Penjualan tidak ditemukan');
     }
 
@@ -60,7 +60,7 @@ export async function cancelSales(c: Context) {
       .where(eq(sales.id, id))
       .execute();
 
-    if (isEmpty(salesData)) {
+    if (_.isEmpty(salesData)) {
       throw NotFoundException('Penjualan tidak ditemukan');
     }
 
