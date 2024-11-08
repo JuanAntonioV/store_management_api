@@ -1,8 +1,8 @@
 // import { drizzle } from 'drizzle-orm/node-postgres';
 import { drizzle } from 'drizzle-orm/neon-http';
-// import { Pool } from 'pg';
 import dotEnv from 'dotenv';
 import env from '@/env';
+// import { Pool } from 'pg';
 import { neon } from '@neondatabase/serverless';
 
 dotEnv.config();

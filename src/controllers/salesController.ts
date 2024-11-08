@@ -3,7 +3,7 @@ import { products, sales } from '@/db/schema';
 import db from '@/libs/db';
 import { NotFoundException } from '@/utils/exceptions';
 import { okResponse } from '@/utils/responses';
-import { desc, eq, ilike } from 'drizzle-orm';
+import { desc, eq, ilike, sum } from 'drizzle-orm';
 import { Context } from 'hono';
 import _ from 'lodash';
 
@@ -75,6 +75,23 @@ export async function cancelSales(c: Context) {
       .execute();
 
     return c.json(okResponse(null, 'Penjualan berhasil dibatalkan'));
+  } catch (err: any) {
+    throw err;
+  }
+}
+
+export async function getTotalRevenue(c: Context) {
+  try {
+    const [totalRevenue] = await db
+      .select({ totalRevenue: sum(sales.total) })
+      .from(sales)
+      .execute();
+
+    const formated = totalRevenue.totalRevenue
+      ? Number(totalRevenue.totalRevenue)
+      : 0;
+
+    return c.json(okResponse(formated));
   } catch (err: any) {
     throw err;
   }
