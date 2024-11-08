@@ -12,19 +12,19 @@ import _ from 'lodash';
 
 export async function getAllProduct(c: Context) {
   const searchParams = c.req.query('search') || '';
-  const page = Number(c.req.query('page')) || 1;
-  const limit = Number(c.req.query('limit')) || 10;
+  // const page = Number(c.req.query('page')) || 1;
+  // const limit = Number(c.req.query('limit')) || 10;
 
   try {
-    const offset = (page - 1) * limit;
+    // const offset = (page - 1) * limit;
 
     const data = await db
       .select()
       .from(products)
       .where(ilike(products.name, `%${searchParams}%`))
-      .orderBy(desc(products.createdAt))
-      .limit(limit)
-      .offset(offset);
+      .orderBy(desc(products.createdAt));
+    // .limit(limit)
+    // .offset(offset);
 
     return c.json(okResponse(data));
   } catch (err: any) {
