@@ -129,3 +129,78 @@ const baseSalesSchema = createInsertSchema(sales, {
 export const createSalesSchema = z.object({
   ...baseSalesSchema.shape,
 });
+
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  photo: varchar('photo'),
+  name: varchar('name').notNull(),
+  email: varchar('email').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at')
+    .defaultNow()
+    .$onUpdate(() => sql`now()`),
+});
+
+const baseUserSchema = createInsertSchema(users, {
+  name: (schema) => schema.name.min(1).max(255),
+  email: (schema) => schema.email.email(),
+}).pick({
+  name: true,
+  email: true,
+});
+
+export const createUserSchema = z.object({
+  ...baseUserSchema.shape,
+  photo: z
+    .instanceof(File, {
+      message: 'Foto harus berupa gambar',
+    })
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+        return allowedTypes.includes(file?.type);
+      },
+      {
+        message: 'File harus berupa gambar',
+      }
+    )
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        return file?.size <= 2 * 1024 * 1024;
+      },
+      {
+        message: 'Ukuran file tidak boleh lebih dari 2MB',
+      }
+    )
+    .nullish(),
+});
+
+export const updateUserSchema = z.object({
+  ...baseUserSchema.shape,
+  photo: z
+    .instanceof(File, {
+      message: 'Foto harus berupa gambar',
+    })
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+        return allowedTypes.includes(file?.type);
+      },
+      {
+        message: 'File harus berupa gambar',
+      }
+    )
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        return file?.size <= 2 * 1024 * 1024;
+      },
+      {
+        message: 'Ukuran file tidak boleh lebih dari 2MB',
+      }
+    )
+    .nullish(),
+});
