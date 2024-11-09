@@ -8,8 +8,8 @@ import userRoute from './userRoute';
 const appRoute = new Hono();
 
 appRoute.route('/', homeRoute);
-appRoute.route('/users', userRoute);
 appRoute.route('/products', productRoute);
+appRoute.route('/users', userRoute);
 appRoute.route('/checkout', checkoutRoute);
 appRoute.route('/sales', salesRoute);
 
