@@ -17,6 +17,7 @@ const EnvSchema = z.object({
   NODE_ENV: z.string().default('development'),
   PORT: z.coerce.number().default(9999),
   DATABASE_URL: z.string().url(),
+  BASE_URL: z.string().url(),
 });
 
 export type env = z.infer<typeof EnvSchema>;

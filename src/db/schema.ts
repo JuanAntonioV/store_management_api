@@ -30,12 +30,10 @@ export const products = pgTable('products', {
 const baseProductSchema = createInsertSchema(products, {
   name: (schema) => schema.name.min(1).max(255),
   price: (schema) => schema.price,
-  image: (schema) => schema.image.nullish(),
   stock: (schema) => schema.stock.positive(),
 }).pick({
   name: true,
   price: true,
-  image: true,
   stock: true,
 });
 
@@ -45,6 +43,30 @@ export const createProductSchema = z.object({
     .number()
     .positive()
     .transform((v) => String(v)),
+  image: z
+    .instanceof(File, {
+      message: 'Foto harus berupa gambar',
+    })
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+        return allowedTypes.includes(file?.type);
+      },
+      {
+        message: 'File harus berupa gambar',
+      }
+    )
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        return file?.size <= 2 * 1024 * 1024;
+      },
+      {
+        message: 'Ukuran file tidak boleh lebih dari 2MB',
+      }
+    )
+    .nullish(),
 });
 
 export const updateProductSchema = z.object({
@@ -53,6 +75,30 @@ export const updateProductSchema = z.object({
     .number()
     .positive()
     .transform((v) => String(v)),
+  image: z
+    .instanceof(File, {
+      message: 'Foto harus berupa gambar',
+    })
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        const allowedTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+        return allowedTypes.includes(file?.type);
+      },
+      {
+        message: 'File harus berupa gambar',
+      }
+    )
+    .refine(
+      (file) => {
+        if (!file || !file) return true;
+        return file?.size <= 2 * 1024 * 1024;
+      },
+      {
+        message: 'Ukuran file tidak boleh lebih dari 2MB',
+      }
+    )
+    .nullish(),
 });
 
 export const sales = pgTable('sales', {

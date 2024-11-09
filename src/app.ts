@@ -9,6 +9,8 @@ import { NotFoundException, TimeoutException } from './utils/exceptions';
 import { Settings } from 'luxon';
 import { HTTPException } from 'hono/http-exception';
 import { errorResponse, serverErrorResponse } from './utils/responses';
+import { serveStatic } from 'hono/serve-static';
+import fs from 'fs/promises';
 
 const app = new Hono();
 
@@ -29,6 +31,26 @@ app.use(logger());
 Settings.defaultZone = 'Asia/Jakarta';
 Settings.defaultLocale = 'id-ID';
 
+const dir = process.cwd();
+
+app.use(
+  '/images/*',
+  serveStatic({
+    root: `${dir}/public/`,
+    getContent: async (path, c) => {
+      const isExist = await fs
+        .access(path)
+        .then(() => true)
+        .catch(() => false);
+
+      if (!isExist) {
+        throw NotFoundException('File tidak ditemukan');
+      }
+
+      return await fs.readFile(path);
+    },
+  })
+);
 app.route('/', appRoute);
 
 app.use('*', (c) => {
