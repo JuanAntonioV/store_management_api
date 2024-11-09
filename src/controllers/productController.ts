@@ -77,6 +77,7 @@ export async function createProduct(c: Context) {
 
   const validated = createProductSchema.safeParse({
     name: data.name,
+    description: data.description,
     price: Number(data.price),
     image: data.image as File,
     stock: Number(data.stock),
@@ -105,6 +106,7 @@ export async function createProduct(c: Context) {
       .insert(products)
       .values({
         name: validated.data.name,
+        description: validated.data.description,
         price: String(validated.data.price),
         image: imgPath,
         stock: validated.data.stock,
@@ -123,6 +125,7 @@ export async function updateProduct(c: Context) {
 
   const validated = updateProductSchema.safeParse({
     name: data.name,
+    description: data.description,
     price: Number(data.price),
     stock: Number(data.stock),
     image: data.image as File,
@@ -161,6 +164,7 @@ export async function updateProduct(c: Context) {
       .update(products)
       .set({
         name: validated.data.name,
+        description: validated.data.description,
         price: String(validated.data.price),
         image: imgPath,
         stock: validated.data.stock,

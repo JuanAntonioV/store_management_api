@@ -13,6 +13,7 @@ import { z } from 'zod';
 export const products = pgTable('products', {
   id: serial('id').primaryKey(),
   name: varchar('name').notNull(),
+  description: varchar('description'),
   price: decimal('price', {
     precision: 20,
     scale: 0,
@@ -29,11 +30,13 @@ export const products = pgTable('products', {
 
 const baseProductSchema = createInsertSchema(products, {
   name: (schema) => schema.name.min(1).max(255),
+  description: (schema) => schema.description.nullish(),
   price: (schema) => schema.price,
   stock: (schema) => schema.stock.positive(),
 }).pick({
   name: true,
   price: true,
+  description: true,
   stock: true,
 });
 
