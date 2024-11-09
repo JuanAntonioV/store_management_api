@@ -5,6 +5,29 @@ import { okResponse, validationErrorResponse } from '@/utils/responses';
 import { eq } from 'drizzle-orm';
 import { Context } from 'hono';
 import { writeFile } from 'fs/promises';
+import env from '@/env';
+
+export async function getAllUsers(c: Context) {
+  try {
+    const data = await db.select().from(users).execute();
+
+    if (!data.length) {
+      throw NotFoundException('User tidak ditemukan');
+    }
+
+    data.forEach((user) => {
+      if (user.photo) {
+        const baseUrl = env.BASE_URL;
+        const imageUrl = `${baseUrl}/images/${user.photo}`;
+        user.photo = imageUrl;
+      }
+    });
+
+    return c.json(okResponse(data));
+  } catch (err: any) {
+    throw err;
+  }
+}
 
 export async function createUser(c: Context) {
   const data = await c.req.json();
