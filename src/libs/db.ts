@@ -1,9 +1,9 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
-// import { drizzle } from 'drizzle-orm/neon-http';
+// import { drizzle } from 'drizzle-orm/node-postgres';
+import { drizzle } from 'drizzle-orm/neon-http';
 import dotEnv from 'dotenv';
 import env from '@/env';
 import { Pool } from 'pg';
-// import { neon } from '@neondatabase/serverless';
+import { neon } from '@neondatabase/serverless';
 
 dotEnv.config();
 
@@ -22,9 +22,9 @@ const pool = new Pool({
   max: 1,
 });
 
-// const sql = neon(process.env.DATABASE_URL!);
+const sql = neon(process.env.DATABASE_URL!);
 
-const db = drizzle({ client: pool });
+const db = drizzle({ client: sql });
 
 export type DB = typeof db;
 

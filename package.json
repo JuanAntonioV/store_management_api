@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bun run --watch src/index.ts",
+    "dev": "tsx watch src/index.ts",
     "vercel:dev": "bun run build && vercel dev",
     "start": "bun run ./dist/src/index.js",
     "typecheck": "tsc --noEmit",
