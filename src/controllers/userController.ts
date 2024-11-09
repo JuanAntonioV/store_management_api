@@ -41,6 +41,20 @@ export async function createUser(c: Context) {
   }
 
   try {
+    const [userExist] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, validated.data.email))
+      .execute();
+
+    if (userExist) {
+      return c.json(
+        validationErrorResponse({
+          email: 'Email sudah terdaftar',
+        })
+      );
+    }
+
     const [newUserId] = await db
       .insert(users)
       .values({
