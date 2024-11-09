@@ -1,7 +1,11 @@
 import { createUserSchema, users } from '@/db/schema';
 import db from '@/libs/db';
 import { NotFoundException } from '@/utils/exceptions';
-import { okResponse, validationErrorResponse } from '@/utils/responses';
+import {
+  errorResponse,
+  okResponse,
+  validationErrorResponse,
+} from '@/utils/responses';
 import { eq } from 'drizzle-orm';
 import { Context } from 'hono';
 import { writeFile } from 'fs/promises';
@@ -48,11 +52,7 @@ export async function createUser(c: Context) {
       .execute();
 
     if (userExist) {
-      return c.json(
-        validationErrorResponse({
-          email: 'Email sudah terdaftar',
-        })
-      );
+      return c.json(errorResponse('Email sudah terdaftar', null, 400));
     }
 
     const [newUserId] = await db
